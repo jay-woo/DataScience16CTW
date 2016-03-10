@@ -28,8 +28,8 @@ body {
 <script>
 
 var margin = {top: 20, right: 20, bottom: 30, left: 40},
-    width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+    width = 1200 - margin.left - margin.right,
+    height = 800 - margin.top - margin.bottom;
 
 var x = d3.scale.ordinal()
     .rangeRoundBands([0, width], .1);
@@ -38,7 +38,7 @@ var y = d3.scale.linear()
     .rangeRound([height, 0]);
 
 var color = d3.scale.ordinal()
-    .range(["#98abc5", "#8a89a6", "#7b6888"]);
+    .range(["#98abc5", "#a05d56", "#ff8c00"]);
 
 var xAxis = d3.svg.axis()
     .scale(x)
@@ -58,14 +58,17 @@ var svg = d3.select("body").append("svg")
 d3.csv("full_state_data.csv", function(error, data) {
   if (error) throw error;
 
-  color.domain(d3.keys(data[0]).filter(function(key) { return ((key !== "State") && (key!="Number") && (key != "Abbrev") && (key != "Population") && (key != "Percent_Catholic") && (key != "NormalizedCount") && (key != "Cleared") && (key != "Not_Guilty") && (key != "Percent_Incriminated")); }));
+  color.domain(d3.keys(data[0]).filter(function(key) { return ((key == "Accused") || (key == "Incriminated") || (key == "Other")); }));
+
+    // (key !== "State") && (key!="Number") && (key != "Abbrev") && (key != "Population") && (key != "Percent_Catholic") && (key != "NormalizedCount") && (key != "Count")); }));
 
   data.forEach(function(d) {
     var y0 = 0;
     d.ages = color.domain().map(function(name) { 
       console.log("name", name); 
       console.log("ynot", y0)
-      // console.log("y1", y0 + +d[name])
+      console.log("y1", y0 + +d[name])
+
       return {name: name, y0: y0, y1: y0 += +d[name]}; });
     d.total = d.ages[d.ages.length - 1].y1;
   });
@@ -73,7 +76,7 @@ d3.csv("full_state_data.csv", function(error, data) {
   data.sort(function(a, b) { return b.total - a.total; });
 
   x.domain(data.map(function(d) { return d.Abbrev; }));
-  y.domain([0, d3.max(data, function(d) { return d.Count; })]);
+  y.domain([0, 525]);
 
   svg.append("g")
       .attr("class", "x axis")
@@ -85,16 +88,17 @@ d3.csv("full_state_data.csv", function(error, data) {
       .call(yAxis)
     .append("text")
       .attr("transform", "rotate(-90)")
-      .attr("y", 6)
+      .attr("x", -300)
+      .attr("y", -35)
       .attr("dy", ".71em")
       .style("text-anchor", "end")
-      .text("Population");
+      .text("Number of Sexual Assault Cases");
 
   var state = svg.selectAll(".state")
       .data(data)
     .enter().append("g")
       .attr("class", "g")
-      .attr("transform", function(d) { return "translate(" + x(d.State) + ",0)"; });
+      .attr("transform", function(d) { return "translate(" + x(d.Abbrev) + ",0)"; });
 
   state.selectAll("rect")
       .data(function(d) { return d.ages; })

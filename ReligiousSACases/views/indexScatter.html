@@ -65,8 +65,11 @@ var yValue = function(d) { return d["NormalizedCount"];}, // data -> value
 var zValue = function(d){ 
     return d.Population; 
 }, 
-    zMap = function(d){ 
-      return Math.sqrt(zValue(d) / 50000);
+    zMap = function(d){
+
+
+      return (10);
+
 
     }
 // setup fill color
@@ -124,7 +127,33 @@ d3.csv("full_state_data.csv", function(error, data) {
 
   console.log("xMap", xMap); 
   console.log("YMap", yMap); 
-  // draw dots
+  // // draw dots
+  // svg.selectAll(".dot")
+  //     .data(data)
+  //   .enter().append("circle")
+  //     .attr("class", "dot")
+  //     .attr("r", zMap)
+  //     .attr("cx", xMap)
+  //     .attr("cy", yMap)
+  //     .attr("opacity", 0.7)
+  //     .style("fill", function(d) { return color(cValue(d));}) 
+  //     .on("mouseover", function(d) {
+  //         tooltip.transition()
+  //              .duration(200)
+  //              .style("opacity", .9);
+  //         tooltip.html(d["State"] + "<br/> (" + xValue(d) 
+  //         + ", " + yValue(d) + ")")
+  //              .style("left", (d3.event.pageX + 5) + "px")
+  //              .style("top", (d3.event.pageY - 28) + "px");
+  //     })
+  //     .on("mouseout", function(d) {
+  //         tooltip.transition()
+  //              .duration(500)
+  //              .style("opacity", 0);
+  //     });
+
+
+    // draw dots
   svg.selectAll(".dot")
       .data(data)
     .enter().append("circle")
@@ -138,8 +167,14 @@ d3.csv("full_state_data.csv", function(error, data) {
           tooltip.transition()
                .duration(200)
                .style("opacity", .9);
-          tooltip.html(d["State"] + "<br/> (" + xValue(d) 
-          + ", " + yValue(d) + ")")
+          tooltip.html(
+
+            "<h1>" + d["State"] + "<br/> (" + xValue(d) 
+          + ", " + yValue(d) + ")" + "</h1>" + "<img src= 'images/alabama.png'>"
+
+
+
+          )
                .style("left", (d3.event.pageX + 5) + "px")
                .style("top", (d3.event.pageY - 28) + "px");
       })

@@ -15,7 +15,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', function(req, res){
-	console.log('./views/indexBar.html')
-    res.sendfile('./views/indexBar.html');
+	// console.log('./views/indexScatter.html')
+    res.sendfile('./views/indexScatter.html');
 });
 app.listen(2000);
